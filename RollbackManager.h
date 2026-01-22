@@ -3,7 +3,12 @@
 
 #include "ParkingRequest.h"
 #include <string>
+#include <ctime>
 using namespace std;
+
+// Forward declarations
+class RequestManager;
+class AllocationEngine;
 
 // Rollback operation types
 enum class RollbackType {
@@ -21,8 +26,7 @@ struct RollbackOperation {
     RequestState previousState;
     time_t operationTime;
     
-    RollbackOperation(RollbackType t, const string& reqId) 
-        : type(t), requestId(reqId), operationTime(time(0)) {}
+    RollbackOperation(RollbackType t, const string& reqId);
 };
 
 // Stack implementation for rollback operations
@@ -32,7 +36,7 @@ private:
         RollbackOperation* operation;
         StackNode* next;
         
-        StackNode(RollbackOperation* op) : operation(op), next(nullptr) {}
+        StackNode(RollbackOperation* op);
     };
     
     StackNode* top;

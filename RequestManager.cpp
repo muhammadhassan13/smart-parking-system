@@ -3,6 +3,11 @@
 #include <iomanip>
 using namespace std;
 
+// ==================== RequestNode Implementation ====================
+RequestNode::RequestNode(ParkingRequest* req) 
+    : request(req), next(nullptr) {}
+
+// ==================== RequestManager Implementation ====================
 RequestManager::RequestManager() : head(nullptr), tail(nullptr), requestCount(0) {}
 
 RequestManager::~RequestManager() {
@@ -162,12 +167,14 @@ void RequestManager::displayRequestHistory() const {
     cout << "Completed: " << completed << endl;
     cout << "Cancelled: " << cancelled << endl;
     cout << "Active: " << active << endl;
+    cout << "Average Duration: " << fixed << setprecision(2) << getAverageDuration() << " minutes" << endl;
     
     // Display all requests
     current = head;
+    cout << "\nDetailed History:" << endl;
     while (current != nullptr) {
-        cout << "\n" << counter << ". ";
-        cout << "Request ID: " << current->request->getRequestId();
+        cout << counter << ". ";
+        cout << "ID: " << current->request->getRequestId();
         cout << ", Vehicle: " << current->request->getVehicle()->getVehicleId();
         cout << ", State: " << current->request->stateToString();
         cout << ", Zone: " << current->request->getRequestedZoneId();
@@ -176,10 +183,10 @@ void RequestManager::displayRequestHistory() const {
             cout << ", Slot: " << current->request->getAllocatedSlot()->getSlotId();
         }
         
+        cout << endl;
         current = current->next;
         counter++;
     }
-    cout << endl;
 }
 
 int RequestManager::countByState(RequestState state) const {

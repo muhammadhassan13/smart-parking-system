@@ -10,7 +10,7 @@ struct RequestNode {
     ParkingRequest* request;
     RequestNode* next;
     
-    RequestNode(ParkingRequest* req) : request(req), next(nullptr) {}
+    RequestNode(ParkingRequest* req);
 };
 
 class RequestManager {
