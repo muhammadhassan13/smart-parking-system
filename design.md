@@ -367,7 +367,7 @@ Future Enhancements:
      
 
 Compilation Command:  
-g++ -o parking\_system \*.cpp
+g++ -o parking_system \*.cpp
 
 Files Required:  
 Core: ParkingSlot, ParkingArea, Zone, Vehicle, ParkingRequest  
@@ -403,7 +403,7 @@ The modular and extensible design ensures maintainability and future scalability
 * * *
 
 FINAL COMPILATION COMMAND:  
-g++ -o parking\_system main.cpp ParkingSlot.cpp ParkingArea.cpp Zone.cpp Vehicle.cpp ParkingRequest.cpp AllocationEngine.cpp RequestManager.cpp RollbackManager.cpp RequestQueue.cpp VehicleBST.cpp ParkingSystem.cpp TestSuite.cpp
+g++ -o parking_system main.cpp ParkingSlot.cpp ParkingArea.cpp Zone.cpp Vehicle.cpp ParkingRequest.cpp AllocationEngine.cpp RequestManager.cpp RollbackManager.cpp RequestQueue.cpp VehicleBST.cpp ParkingSystem.cpp TestSuite.cpp
 
 RUN COMMAND:  
-./parking\_system
+./parking_system
