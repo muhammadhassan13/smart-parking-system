@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+
+{% block title %}Pending Requests - IntelliCity | Smart Parking{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="fw-bold">Queued Requests (Waiting to be Processed)</h5>
+        {% if system.request_queue.get_size() > 0 %}
+        <a href="{{ url_for('main.process_request') }}" class="btn btn-sm btn-success">Process Next Request</a>
+        {% endif %}
+    </div>
+    <div class="card-body">
+        {% set queued_requests = system.request_queue.get_all_requests() %}
+        {% if queued_requests %}
+        <div class="table-responsive">
+            <table class="table table-sm table-hover">
+                <thead>
+                    <tr>
+                        <th>Request ID</th>
+                        <th>Vehicle ID</th>
+                        <th>Requested Zone</th>
+                        <th>Time</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for request in queued_requests %}
+                    <tr>
+                        <td>{{ request.get_request_id() }}</td>
+                        <td>{{ request.get_vehicle_id() }}</td>
+                        <td>{{ request.get_requested_zone_id() }}</td>
+                        <td>{{ request.request_time.strftime('%d/%m/%Y %H:%M:%S') }}</td>
+                        <td><span class="badge bg-secondary">QUEUED</span></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <p class="text-muted">No requests in queue.</p>
+        {% endif %}
+    </div>
+</div>
+
+<div class="card mt-4">
+    <div class="card-header">
+        <h5 class="fw-bold">Allocated Requests (Active Sessions)</h5>
+    </div>
+    <div class="card-body">
+        {% set allocated_requests = system.request_manager.get_allocated_requests() %}
+        {% if allocated_requests %}
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Request ID</th>
+                        <th>Vehicle ID</th>
+                        <th>Slot ID</th>
+                        <th>Total Cost</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for request in allocated_requests %}
+                    <tr>
+                        <td>{{ request.get_request_id() }}</td>
+                        <td>{{ request.get_vehicle_id() }}</td>
+                        <td>{{ request.get_allocated_slot_id() }}</td>
+                        <td>
+                            <span
+                                class="badge {% if request.get_penalty_cost() > 0 %}bg-danger{% else %}bg-success{% endif %}">
+                                ${{ "%.2f"|format(request.get_total_cost()) }}
+                            </span>
+                        </td>
+                        <td>{{ request.state_to_string() }}</td>
+                        <td>
+                            <div class="btn-group btn-group-sm">
+                                {% if request.get_current_state().name == 'ALLOCATED' %}
+                                <a href="{{ url_for('main.mark_occupied', request_id=request.get_request_id()) }}"
+                                    class="btn btn-success">Occupied</a>
+                                <a href="{{ url_for('main.cancel_request', request_id=request.get_request_id()) }}"
+                                    class="btn btn-danger">Cancel</a>
+                                {% elif request.get_current_state().name == 'OCCUPIED' %}
+                                <a href="{{ url_for('main.mark_released', request_id=request.get_request_id()) }}"
+                                    class="btn btn-warning">Release</a>
+                                {% endif %}
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <p class="text-muted">No allocated requests.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

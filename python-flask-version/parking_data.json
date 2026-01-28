@@ -1,0 +1,321 @@
+{
+    "role_counters": {
+        "vehicle": 1008,
+        "request": 1007
+    },
+    "zones": [
+        {
+            "zone_id": "Z1",
+            "zone_name": "Downtown",
+            "total_slots": 5,
+            "available_slots": 4,
+            "areas": 2,
+            "max_areas": 3,
+            "adjacent_zones": [
+                "Z2",
+                "Z3"
+            ]
+        },
+        {
+            "zone_id": "Z2",
+            "zone_name": "Uptown",
+            "total_slots": 4,
+            "available_slots": 3,
+            "areas": 1,
+            "max_areas": 2,
+            "adjacent_zones": [
+                "Z1",
+                "Z3"
+            ]
+        },
+        {
+            "zone_id": "Z3",
+            "zone_name": "Midtown",
+            "total_slots": 8,
+            "available_slots": 7,
+            "areas": 1,
+            "max_areas": 2,
+            "adjacent_zones": [
+                "Z2",
+                "Z1"
+            ]
+        }
+    ],
+    "slots": [
+        {
+            "slot_id": "Z1-A1-S1",
+            "zone_id": "Z1",
+            "is_available": true,
+            "vehicle_id": ""
+        },
+        {
+            "slot_id": "Z1-A1-S2",
+            "zone_id": "Z1",
+            "is_available": false,
+            "vehicle_id": "V1003"
+        },
+        {
+            "slot_id": "Z1-A1-S3",
+            "zone_id": "Z1",
+            "is_available": true,
+            "vehicle_id": ""
+        },
+        {
+            "slot_id": "Z1-A2-S1",
+            "zone_id": "Z1",
+            "is_available": true,
+            "vehicle_id": ""
+        },
+        {
+            "slot_id": "Z1-A2-S2",
+            "zone_id": "Z1",
+            "is_available": true,
+            "vehicle_id": ""
+        },
+        {
+            "slot_id": "Z2-B1-S1",
+            "zone_id": "Z2",
+            "is_available": true,
+            "vehicle_id": ""
+        },
+        {
+            "slot_id": "Z2-B1-S2",
+            "zone_id": "Z2",
+            "is_available": false,
+            "vehicle_id": "V1004"
+        },
+        {
+            "slot_id": "Z2-B1-S3",
+            "zone_id": "Z2",
+            "is_available": true,
+            "vehicle_id": ""
+        },
+        {
+            "slot_id": "Z2-B1-S4",
+            "zone_id": "Z2",
+            "is_available": true,
+            "vehicle_id": ""
+        },
+        {
+            "slot_id": "Z3-C1-S1",
+            "zone_id": "Z3",
+            "is_available": false,
+            "vehicle_id": "V1006"
+        },
+        {
+            "slot_id": "Z3-C1-S2",
+            "zone_id": "Z3",
+            "is_available": true,
+            "vehicle_id": ""
+        },
+        {
+            "slot_id": "Z3-C1-S3",
+            "zone_id": "Z3",
+            "is_available": true,
+            "vehicle_id": ""
+        },
+        {
+            "slot_id": "Z3-C1-S4",
+            "zone_id": "Z3",
+            "is_available": true,
+            "vehicle_id": ""
+        },
+        {
+            "slot_id": "Z3-C1-S5",
+            "zone_id": "Z3",
+            "is_available": true,
+            "vehicle_id": ""
+        },
+        {
+            "slot_id": "Z3-C1-S6",
+            "zone_id": "Z3",
+            "is_available": true,
+            "vehicle_id": ""
+        },
+        {
+            "slot_id": "Z3-C1-S7",
+            "zone_id": "Z3",
+            "is_available": true,
+            "vehicle_id": ""
+        },
+        {
+            "slot_id": "Z3-C1-S8",
+            "zone_id": "Z3",
+            "is_available": true,
+            "vehicle_id": ""
+        }
+    ],
+    "vehicles": [
+        {
+            "vehicle_id": "V1000",
+            "vehicle_type": "truck",
+            "preferred_zone": "Z2",
+            "license_plate": "5778",
+            "owner_name": "hassan",
+            "registration_time": "2026-01-29 00:44:14"
+        },
+        {
+            "vehicle_id": "V1001",
+            "vehicle_type": "Sedan",
+            "preferred_zone": "Z1",
+            "license_plate": "1234",
+            "owner_name": "John Doe",
+            "registration_time": "2026-01-29 00:56:15"
+        },
+        {
+            "vehicle_id": "V1002",
+            "vehicle_type": "SUV",
+            "preferred_zone": "Z2",
+            "license_plate": "5678",
+            "owner_name": "Jane Smith",
+            "registration_time": "2026-01-29 00:56:15"
+        },
+        {
+            "vehicle_id": "V1003",
+            "vehicle_type": "Truck",
+            "preferred_zone": "Z1",
+            "license_plate": "9012",
+            "owner_name": "Bob Wilson",
+            "registration_time": "2026-01-29 00:56:15"
+        },
+        {
+            "vehicle_id": "V1004",
+            "vehicle_type": "Compact",
+            "preferred_zone": "Z3",
+            "license_plate": "3456",
+            "owner_name": "Alice Brown",
+            "registration_time": "2026-01-29 00:56:15"
+        },
+        {
+            "vehicle_id": "V1005",
+            "vehicle_type": "Luxury",
+            "preferred_zone": "Z2",
+            "license_plate": "7890",
+            "owner_name": "Charlie Green",
+            "registration_time": "2026-01-29 00:56:15"
+        },
+        {
+            "vehicle_id": "V1006",
+            "vehicle_type": "EV",
+            "preferred_zone": "Z1",
+            "license_plate": "1111",
+            "owner_name": "Eve White",
+            "registration_time": "2026-01-29 00:56:15"
+        },
+        {
+            "vehicle_id": "V1007",
+            "vehicle_type": "Van",
+            "preferred_zone": "Z3",
+            "license_plate": "2222",
+            "owner_name": "Frank Black",
+            "registration_time": "2026-01-29 00:56:15"
+        }
+    ],
+    "requests": [
+        {
+            "request_id": "R1000",
+            "vehicle_id": "V1000",
+            "requested_zone_id": "Z2",
+            "allocated_slot_id": "Z2-B1-S1",
+            "cross_zone_allocation": false,
+            "is_adjacent_zone": false,
+            "base_cost": 10.0,
+            "penalty_cost": 0.0,
+            "total_cost": 10.0,
+            "current_state": "RELEASED",
+            "request_time": "2026-01-29 00:44:27",
+            "allocation_time": "2026-01-29 00:44:29",
+            "release_time": "2026-01-29 00:49:04"
+        },
+        {
+            "request_id": "R1001",
+            "vehicle_id": "V1001",
+            "requested_zone_id": "Z1",
+            "allocated_slot_id": "Z1-A1-S1",
+            "cross_zone_allocation": false,
+            "is_adjacent_zone": false,
+            "base_cost": 10.0,
+            "penalty_cost": 0.0,
+            "total_cost": 10.0,
+            "current_state": "RELEASED",
+            "request_time": "2026-01-29 00:56:15",
+            "allocation_time": "2026-01-29 00:56:15",
+            "release_time": "2026-01-29 00:56:15"
+        },
+        {
+            "request_id": "R1002",
+            "vehicle_id": "V1002",
+            "requested_zone_id": "Z2",
+            "allocated_slot_id": "Z2-B1-S1",
+            "cross_zone_allocation": false,
+            "is_adjacent_zone": false,
+            "base_cost": 10.0,
+            "penalty_cost": 0.0,
+            "total_cost": 10.0,
+            "current_state": "RELEASED",
+            "request_time": "2026-01-29 00:56:15",
+            "allocation_time": "2026-01-29 00:56:15",
+            "release_time": "2026-01-29 00:56:39"
+        },
+        {
+            "request_id": "R1003",
+            "vehicle_id": "V1003",
+            "requested_zone_id": "Z1",
+            "allocated_slot_id": "Z1-A1-S2",
+            "cross_zone_allocation": false,
+            "is_adjacent_zone": false,
+            "base_cost": 10.0,
+            "penalty_cost": 0.0,
+            "total_cost": 10.0,
+            "current_state": "OCCUPIED",
+            "request_time": "2026-01-29 00:56:15",
+            "allocation_time": "2026-01-29 00:56:15",
+            "release_time": null
+        },
+        {
+            "request_id": "R1004",
+            "vehicle_id": "V1004",
+            "requested_zone_id": "Z2",
+            "allocated_slot_id": "Z2-B1-S2",
+            "cross_zone_allocation": true,
+            "is_adjacent_zone": true,
+            "base_cost": 10.0,
+            "penalty_cost": 3.0,
+            "total_cost": 13.0,
+            "current_state": "ALLOCATED",
+            "request_time": "2026-01-29 00:56:15",
+            "allocation_time": "2026-01-29 00:56:15",
+            "release_time": null
+        },
+        {
+            "request_id": "R1005",
+            "vehicle_id": "V1005",
+            "requested_zone_id": "Z1",
+            "allocated_slot_id": "Z1-A1-S3",
+            "cross_zone_allocation": true,
+            "is_adjacent_zone": true,
+            "base_cost": 10.0,
+            "penalty_cost": 3.0,
+            "total_cost": 13.0,
+            "current_state": "RELEASED",
+            "request_time": "2026-01-29 00:56:15",
+            "allocation_time": "2026-01-29 00:56:15",
+            "release_time": "2026-01-29 00:56:47"
+        },
+        {
+            "request_id": "R1006",
+            "vehicle_id": "V1006",
+            "requested_zone_id": "Z3",
+            "allocated_slot_id": "Z3-C1-S1",
+            "cross_zone_allocation": true,
+            "is_adjacent_zone": true,
+            "base_cost": 10.0,
+            "penalty_cost": 3.0,
+            "total_cost": 13.0,
+            "current_state": "ALLOCATED",
+            "request_time": "2026-01-29 00:56:15",
+            "allocation_time": "2026-01-29 00:56:22",
+            "release_time": null
+        }
+    ]
+}

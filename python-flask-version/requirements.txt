@@ -1,0 +1,7 @@
+# Python dependencies for Smart Parking System
+Flask>=2.0.0
+# No external dependencies required for basic functionality
+
+# Optional: For future UI development
+# PyQt5>=5.15
+# tkinter (built-in)

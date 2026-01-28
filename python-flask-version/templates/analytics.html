@@ -1,0 +1,221 @@
+{% extends "base.html" %}
+
+{% block title %}Analytics - IntelliCity | Smart Parking{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold text-primary mb-0">System Analytics</h2>
+</div>
+
+<!-- Financial Stats -->
+<div class="row mb-4">
+    <div class="col-md-4">
+        <div class="card bg-success text-white">
+            <div class="card-body">
+                <h5 class="card-title">Total Revenue</h5>
+                <h2>${{ "%.2f"|format(data.financial.total_revenue) }}</h2>
+                <small>Average per request: ${{ "%.2f"|format(data.financial.avg_revenue_per_request) }}</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card bg-warning text-dark">
+            <div class="card-body">
+                <h5 class="card-title">Cross-Zone allocations</h5>
+                <h2>{{ data.financial.cross_zone_count }}</h2>
+                <small>Allocations outside preferred zone</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card bg-primary text-white">
+            <div class="card-body">
+                <h5 class="card-title">Total Requests</h5>
+                <h2>{{ data.requests.total }}</h2>
+                <small>Active: {{ data.requests.active }} | Pending: {{ system.request_queue.get_size() }}</small>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Zone Utilization -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header border-bottom-0">
+                <h5 class="mb-0 text-primary fw-bold" style="color: var(--primary-color) !important;">Zone Utilization
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead class="table-light text-primary">
+                            <tr>
+                                <th>Zone</th>
+                                <th>Capacity</th>
+                                <th>Occupancy</th>
+                                <th>Utilization</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for zone in data.zones %}
+                            <tr>
+                                <td><strong>{{ zone.zone_name }}</strong> <span class="badge bg-secondary">{{
+                                        zone.zone_id }}</span></td>
+                                <td>{{ zone.total_slots }} slots</td>
+                                <td>{{ zone.occupied_slots }} occupied</td>
+                                <td style="width: 40%">
+                                    <div class="progress" style="height: 25px;">
+                                        <div class="progress-bar {% if zone.utilization > 80 %}bg-danger{% elif zone.utilization > 50 %}bg-warning{% else %}bg-success{% endif %}"
+                                            role="progressbar" style="width: {{ '%.1f'|format(zone.utilization) }}%"
+                                            aria-valuenow="{{ zone.utilization }}" aria-valuemin="0"
+                                            aria-valuemax="100">
+                                            {{ "%.1f"|format(zone.utilization) }}%
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    {% if zone.available_slots == 0 %}
+                                    <span class="badge bg-danger">FULL</span>
+                                    {% elif zone.utilization > 80 %}
+                                    <span class="badge bg-warning text-dark">BUSY</span>
+                                    {% else %}
+                                    <span class="badge bg-success">AVAILABLE</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Request Request Distribution -->
+<div class="row mb-4">
+    <div class="col-md-6">
+        <div class="card h-100">
+            <div class="card-header">
+                <h5 class="mb-0">Request Status Distribution</h5>
+            </div>
+            <div class="card-body">
+                <div class="list-group">
+                    <div class="list-group-item d-flex justify-content-between align-items-center">
+                        Completed Requests (RELEASED)
+                        <span class="badge bg-success rounded-pill">{{ data.requests.completed }}</span>
+                    </div>
+                    <div class="list-group-item d-flex justify-content-between align-items-center">
+                        Active Requests (Allocated/Occupied)
+                        <span class="badge bg-primary rounded-pill">{{ data.requests.active }}</span>
+                    </div>
+                    <div class="list-group-item d-flex justify-content-between align-items-center">
+                        Cancelled Requests
+                        <span class="badge bg-danger rounded-pill">{{ data.requests.cancelled }}</span>
+                    </div>
+                    <div class="list-group-item d-flex justify-content-between align-items-center">
+                        Pending in Queue
+                        <span class="badge bg-warning text-dark rounded-pill">{{ system.request_queue.get_size()
+                            }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card h-100">
+            <div class="card-header">
+                <h5 class="mb-0">Demand by Zone</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th>Requested Zone</th>
+                                <th>Request Count</th>
+                                <th>Share</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for zone_id, count in data.requests.distribution.items() %}
+                            <tr>
+                                <td><span class="badge bg-info">{{ zone_id }}</span></td>
+                                <td>{{ count }}</td>
+                                <td>
+                                    {% set share = (count * 100 / data.requests.total) if data.requests.total > 0 else 0
+                                    %}
+                                    {{ "%.1f"|format(share) }}%
+                                </td>
+                            </tr>
+                            {% endfor %}
+                            {% if not data.requests.distribution %}
+                            <tr>
+                                <td colspan="3" class="text-center text-muted">No requests yet</td>
+                            </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Peak Usage Recommendations -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card border-primary">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0"><i class="bi bi-lightbulb"></i> System Insights</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6><i class="bi bi-graph-up-arrow"></i> Busiest Zones</h6>
+                        {% set ns = namespace(busiest=None, max_util=0) %}
+                        {% for zone in data.zones %}
+                        {% if zone.utilization > ns.max_util %}
+                        {% set ns.max_util = zone.utilization %}
+                        {% set ns.busiest = zone %}
+                        {% endif %}
+                        {% endfor %}
+
+                        {% if ns.busiest %}
+                        <p class="text-danger">
+                            <strong>{{ ns.busiest.zone_name }} ({{ ns.busiest.zone_id }})</strong> is the busiest zone
+                            with {{ "%.1f"|format(ns.max_util) }}% utilization.
+                        </p>
+                        <p class="small text-muted">Recommendation: Consider directing traffic to adjacent zones or
+                            increasing pricing.</p>
+                        {% else %}
+                        <p class="text-muted">No usage data available yet.</p>
+                        {% endif %}
+                    </div>
+                    <div class="col-md-6">
+                        <h6><i class="bi bi-check-circle"></i> Best Availability</h6>
+                        {% set ns = namespace(avail=None, max_avail=-1) %}
+                        {% for zone in data.zones %}
+                        {% if zone.available_slots > ns.max_avail %}
+                        {% set ns.max_avail = zone.available_slots %}
+                        {% set ns.avail = zone %}
+                        {% endif %}
+                        {% endfor %}
+
+                        {% if ns.avail %}
+                        <p class="text-success">
+                            <strong>{{ ns.avail.zone_name }} ({{ ns.avail.zone_id }})</strong> has the most space with
+                            {{ ns.max_avail }} available slots.
+                        </p>
+                        {% else %}
+                        <p class="text-muted">No usage data available yet.</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

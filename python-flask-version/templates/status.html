@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+
+{% block title %}System Status - IntelliCity | Smart Parking{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold text-primary mb-0">System Status</h2>
+        <span class="badge bg-success py-2 px-3"><i class="bi bi-check-circle-fill me-1"></i> System Online</span>
+    </div>
+
+    <!-- Summary Statistics -->
+    <div class="row g-4 mb-5">
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center">
+                        <div class="bg-primary bg-opacity-10 p-3 rounded-circle me-3">
+                            <i class="bi bi-car-front text-primary fs-3"></i>
+                        </div>
+                        <div>
+                            <h3 class="fw-bold mb-0">{{ system.vehicle_bst.get_count() }}</h3>
+                            <p class="text-muted mb-0">Registered Vehicles</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center">
+                        <div class="bg-warning bg-opacity-10 p-3 rounded-circle me-3">
+                            <i class="bi bi-list-task text-warning fs-3"></i>
+                        </div>
+                        <div>
+                            <h3 class="fw-bold mb-0">{{ system.request_queue.get_size() }}</h3>
+                            <p class="text-muted mb-0">Pending Requests</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center">
+                        <div class="bg-info bg-opacity-10 p-3 rounded-circle me-3">
+                            <i class="bi bi-grid-3x3-gap text-info fs-3"></i>
+                        </div>
+                        <div>
+                            <h3 class="fw-bold mb-0">{{ system.zones|length }}</h3>
+                            <p class="text-muted mb-0">Active Zones</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Zone Status Section -->
+    <div class="row g-4">
+        <div class="col-12">
+            <h4 class="fw-bold mb-3">Zone Breakdown</h4>
+        </div>
+        {% for zone in system.zones %}
+        <div class="col-md-6 col-lg-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-header border-0 bg-transparent pt-4 px-4">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="fw-bold text-primary mb-0">{{ zone.get_zone_name() }}</h5>
+                        <span class="badge bg-light text-dark">{{ zone.get_zone_id() }}</span>
+                    </div>
+                </div>
+                <div class="card-body px-4 pb-4">
+                    <div class="mb-3 d-flex justify-content-between small">
+                        <span class="text-muted">Areas: <strong>{{ zone.get_current_areas() }}</strong></span>
+                        <span class="text-muted">Slots: <strong>{{ zone.get_available_slots() }}/{{
+                                zone.get_total_slots() }}</strong></span>
+                    </div>
+
+                    {% set utilization = (((zone.get_total_slots() - zone.get_available_slots()) * 100 /
+                    zone.get_total_slots()) | round(1)) if zone.get_total_slots() > 0 else 0 %}
+                    <div class="mb-1 small d-flex justify-content-between">
+                        <span>Utilization</span>
+                        <span class="fw-bold">{{ utilization }}%</span>
+                    </div>
+                    <div class="progress" style="height: 10px;">
+                        <div class="progress-bar {% if utilization > 80 %}bg-danger{% elif utilization > 50 %}bg-warning{% else %}bg-success{% endif %}"
+                            role="progressbar" style="width: {{ utilization }}%" aria-valuenow="{{ utilization }}"
+                            aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,123 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="fw-bold">Quick Actions</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <a href="{{ url_for('main.register_vehicle') }}" class="btn btn-primary btn-lg w-100 mb-3">
+                            Register Vehicle
+                        </a>
+                        <a href="{{ url_for('main.create_request') }}" class="btn btn-success btn-lg w-100 mb-3">
+                            Create Request
+                        </a>
+                        <a href="{{ url_for('main.process_request') }}" class="btn btn-warning btn-lg w-100 mb-3">
+                            Process Next Request
+                        </a>
+                    </div>
+                    <div class="col-md-6">
+                        <a href="{{ url_for('main.run_tests') }}" class="btn btn-info btn-lg w-100 mb-3"
+                            onclick="return confirm('Running the test suite will reset the system and clear all existing data. Do you want to proceed?');">
+                            Run Tests
+                        </a>
+                        <a href="{{ url_for('main.demo') }}" class="btn btn-secondary btn-lg w-100 mb-3">
+                            Run Demo
+                        </a>
+
+                        <a href="{{ url_for('main.rollback', k=1) }}" class="btn btn-danger btn-lg w-100 mb-3">
+                            Rollback Last Operation
+                        </a>
+                    </div>
+                </div>
+                <!-- System wide actions -->
+                <div class="row">
+                    <div class="col-12">
+                        <a href="{{ url_for('main.reset_system') }}" class="btn btn-outline-danger btn-lg w-100 mb-3"
+                            onclick="return confirm('Are you sure you want to reset the entire system? All data will be lost.');">
+                            <i class="bi bi-arrow-counterclockwise"></i> Reset System
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="fw-bold">System Overview</h5>
+            </div>
+            <div class="card-body">
+                <p><strong>Total Zones:</strong> {{ system.zone_count }}</p>
+                <p><strong>Active Requests:</strong> {{ system.request_queue.get_size() }}</p>
+                <p><strong>Registered Vehicles:</strong> {{ system.vehicle_bst.get_count() }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="fw-bold">Recent Activity</h5>
+            </div>
+            <div class="card-body">
+                {% set active_requests = system.request_manager.get_allocated_requests()[:5] %}
+                {% if active_requests %}
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Vehicle</th>
+                                <th>Zone</th>
+                                <th>Slot</th>
+                                <th>State</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for req in active_requests %}
+                            <tr>
+                                <td>{{ req.get_vehicle_id() }}</td>
+                                <td>{{ req.get_allocated_zone_id() }}</td>
+                                <td>{{ req.get_allocated_slot_id() }}</td>
+                                <td><span class="badge bg-secondary">{{ req.state_to_string() }}</span></td>
+                                <td>
+                                    <div class="btn-group btn-group-sm">
+                                        {% if req.get_current_state().name == 'ALLOCATED' %}
+                                        <a href="{{ url_for('main.mark_occupied', request_id=req.get_request_id()) }}"
+                                            class="btn btn-success" title="Mark Occupied"><i class="bi bi-check-lg"></i>
+                                            Occ</a>
+                                        <a href="{{ url_for('main.cancel_request', request_id=req.get_request_id()) }}"
+                                            class="btn btn-danger" title="Cancel Request"><i class="bi bi-x-lg"></i>
+                                            Can</a>
+                                        {% elif req.get_current_state().name == 'OCCUPIED' %}
+                                        <a href="{{ url_for('main.mark_released', request_id=req.get_request_id()) }}"
+                                            class="btn btn-warning" title="Release Slot"><i
+                                                class="bi bi-box-arrow-right"></i> Rel</a>
+                                        {% endif %}
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    <div class="text-end">
+                        <a href="{{ url_for('main.pending_requests') }}" class="btn btn-sm btn-link">View All
+                            Requests</a>
+                    </div>
+                </div>
+                {% else %}
+                <p class="text-muted text-center py-3">No active parking sessions.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

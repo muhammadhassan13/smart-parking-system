@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}Vehicles - IntelliCity | Smart Parking{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h5 class="fw-bold">All Registered Vehicles</h5>
+    </div>
+    <div class="card-body">
+        {% if system.vehicle_bst.get_count() > 0 %}
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Vehicle ID</th>
+                        <th>Owner Name</th>
+                        <th>License Plate</th>
+                        <th>Type</th>
+                        <th>Preferred Zone</th>
+                        <th>Registration Time</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for vehicle in system.vehicle_bst.get_all_vehicles() %}
+                    <tr>
+                        <td>{{ vehicle.get_vehicle_id() }}</td>
+                        <td>{{ vehicle.get_owner_name() }}</td>
+                        <td>{{ vehicle.get_license_plate() }}</td>
+                        <td>{{ vehicle.get_vehicle_type() }}</td>
+                        <td>{{ vehicle.get_preferred_zone() }}</td>
+                        <td>{{ vehicle.get_registration_time() }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <p class="text-muted">No vehicles registered yet.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

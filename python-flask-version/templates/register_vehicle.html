@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block title %}Register Vehicle - IntelliCity | Smart Parking{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5>Register New Vehicle</h5>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    <div class="mb-3">
+                        <label for="vehicle_type" class="form-label">Vehicle Type</label>
+                        <select class="form-select" id="vehicle_type" name="vehicle_type" required>
+                            <option value="">Select vehicle type</option>
+                            <option value="car">Car</option>
+                            <option value="motorcycle">Motorcycle</option>
+                            <option value="truck">Truck</option>
+                            <option value="van">Van</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="license_plate" class="form-label">License Plate</label>
+                        <input type="text" class="form-control" id="license_plate" name="license_plate" required
+                            autocomplete="off" pattern="\d{4}" title="License plate must be exactly 4 digits."
+                            placeholder="xxxx">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="owner_name" class="form-label">Owner Name</label>
+                        <input type="text" class="form-control" id="owner_name" name="owner_name" required
+                            autocomplete="off">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="preferred_zone" class="form-label">Preferred Zone</label>
+                        <select class="form-select" id="preferred_zone" name="preferred_zone" required>
+                            <option value="">Select preferred zone</option>
+                            {% for zone in zones %}
+                            <option value="{{ zone.zone_id }}">{{ zone.zone_name }} ({{ zone.zone_id }})</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary">Register Vehicle</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
